@@ -1,14 +1,17 @@
 package com.avalith.prices.api;
 
+import com.avalith.prices.calculator.DiscountCalculator;
 import com.avalith.prices.models.Year;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
-
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 @RestController
@@ -16,6 +19,9 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Slf4j
 public class PriceController {
+
+    @Autowired
+    DiscountCalculator discountCalculator = new DiscountCalculator();
 
     @PostMapping("/price")
     public ResponseEntity<Double> getPrice(@RequestParam Double price, @RequestParam String date){
@@ -32,5 +38,19 @@ public class PriceController {
             return null;
         }
         return opt.map(value -> new ResponseEntity<>(value,HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(null, HttpStatus.NOT_FOUND));
+    }
+    @GetMapping("/nolabs/verify")
+    public ResponseEntity<Boolean> isNoLab(@RequestParam Integer dia, @RequestParam Integer mes, @RequestParam Integer year){
+        LocalDate date = LocalDate.of(year, mes, dia);
+        Boolean value = false;
+        value = discountCalculator.verifyNoLabs(date);
+        value = discountCalculator.verifyWednesday(date);
+        return new ResponseEntity<>(value,HttpStatus.OK);
+    }
+    @GetMapping("/nolabs/discount")
+    public ResponseEntity<Double> getDiscount(@RequestParam ){
+
+        Double value = discountCalculator.getFinalPrice(localDateTime);
+        return new ResponseEntity<>(value,HttpStatus.OK);
     }
 }
