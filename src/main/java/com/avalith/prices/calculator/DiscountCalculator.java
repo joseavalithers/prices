@@ -1,6 +1,7 @@
 package com.avalith.prices.calculator;
 
 import com.avalith.prices.models.Year;
+import org.springframework.context.annotation.Bean;
 import org.springframework.web.client.RestTemplate;
 
 import java.time.DayOfWeek;
@@ -11,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
+
 
 public class DiscountCalculator {
     public Optional<Year> getYearFromApi() {
@@ -68,12 +70,18 @@ public class DiscountCalculator {
     }
     //vacaciones de invierno 18/07-29/07
     public boolean verifyVacation(LocalDate date){
-        return date.isBefore(LocalDate.of(2022, 7, 30)) &&
-                date.isAfter(LocalDate.of(2022, 7, 17));
+        LocalDate vacationStartDate = LocalDate.of(2022,8,17);
+        LocalDate vacationEndDate = LocalDate.of(2022,8,30);
+        if (date.isBefore(vacationEndDate) && date.isAfter(vacationStartDate)){
+            return true;
+        }else {
+            return false;
+        }
     }
     //la regla es que se aplica el descuento mas grande solamente y si se aplica el aumento no se aplica descuento
     public Double getFinalPrice(LocalDateTime date){
         LocalDate localDate = LocalDate.of(date.getYear(),date.getMonth(),date.getDayOfMonth());
+
         if (verifyVacation(localDate)){
             return -10.0;
         }
@@ -83,7 +91,11 @@ public class DiscountCalculator {
         if (verifyWednesday(localDate )){
             return -25.0;
         }
-        return +20.0;
+        if (verifyTime(date.getHour(),date.getMinute())){
+            return +20.0;
+        }
+        else {
+            return 0.0;
+        }
     }
-
 }

@@ -1,7 +1,9 @@
 package com.avalith.prices.api;
 
 import com.avalith.prices.calculator.DiscountCalculator;
+import com.avalith.prices.models.MyDate;
 import com.avalith.prices.models.Year;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +24,7 @@ public class PriceController {
 
     @Autowired
     DiscountCalculator discountCalculator = new DiscountCalculator();
+
 
     @PostMapping("/price")
     public ResponseEntity<Double> getPrice(@RequestParam Double price, @RequestParam String date){
@@ -47,10 +50,16 @@ public class PriceController {
         value = discountCalculator.verifyWednesday(date);
         return new ResponseEntity<>(value,HttpStatus.OK);
     }
-    @GetMapping("/nolabs/discount")
-    public ResponseEntity<Double> getDiscount(@RequestParam ){
 
-        Double value = discountCalculator.getFinalPrice(localDateTime);
-        return new ResponseEntity<>(value,HttpStatus.OK);
+    @Operation(operationId = "getDiscount", summary = "get the discount as a double")
+    @GetMapping("/nolabs/discount")
+    public ResponseEntity<Double> getDiscount(@RequestBody MyDate myDate){
+        try{
+            LocalDateTime localDateTime = LocalDateTime.of(myDate.getYear(),myDate.getMes(),myDate.getDia(),myDate.getHora(),myDate.getMinuto());
+            Double value = discountCalculator.getFinalPrice(localDateTime);
+            return new ResponseEntity<>(value,HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(null,HttpStatus.NOT_ACCEPTABLE);
+        }
     }
 }
