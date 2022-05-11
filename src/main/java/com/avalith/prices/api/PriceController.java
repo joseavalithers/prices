@@ -12,6 +12,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
+
+import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -50,13 +52,16 @@ public class PriceController {
         value = discountCalculator.verifyWednesday(date);
         return new ResponseEntity<>(value,HttpStatus.OK);
     }
+    @GetMapping("nolabs/localtime")
+    public ResponseEntity<LocalDateTime> getLocalDate(){
+        return new ResponseEntity<>(LocalDateTime.now(),HttpStatus.OK);
+    }
 
     @Operation(operationId = "getDiscount", summary = "get the discount as a double")
-    @GetMapping("/nolabs/discount")
-    public ResponseEntity<Double> getDiscount(@RequestBody MyDate myDate){
+    @PostMapping("/nolabs/discount")
+    public ResponseEntity<Double> getDiscount(@RequestBody LocalDateTime myDate){
         try{
-            LocalDateTime localDateTime = LocalDateTime.of(myDate.getYear(),myDate.getMes(),myDate.getDia(),myDate.getHora(),myDate.getMinuto());
-            Double value = discountCalculator.getFinalPrice(localDateTime);
+            Double value = discountCalculator.getFinalPrice(myDate);
             return new ResponseEntity<>(value,HttpStatus.OK);
         }catch (Exception e){
             return new ResponseEntity<>(null,HttpStatus.NOT_ACCEPTABLE);
