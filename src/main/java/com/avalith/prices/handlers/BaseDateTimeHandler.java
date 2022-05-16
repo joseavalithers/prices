@@ -1,10 +1,14 @@
 package com.avalith.prices.handlers;
 
+import com.avalith.prices.utils.Constants;
+
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.temporal.Temporal;
+
+import static com.avalith.prices.utils.Constants.*;
 
 abstract class BaseDateTimeHandler implements IDateTimeHandler {
     protected BaseDateTimeHandler next;
@@ -15,7 +19,7 @@ abstract class BaseDateTimeHandler implements IDateTimeHandler {
 
     @Override
     public Double procesar(LocalDateTime localDateTime) {
-        return 0.0;
+        return zero;
     }
 
     public LocalTime setHour(LocalDateTime localDateTime) {
@@ -35,13 +39,7 @@ abstract class BaseDateTimeHandler implements IDateTimeHandler {
     }
 
     public boolean verifyVacation(LocalDate date) {
-        LocalDate vacationStartDate = LocalDate.of(2022, 8, 17);
-        LocalDate vacationEndDate = LocalDate.of(2022, 8, 30);
-        if (date.isBefore(vacationEndDate) && date.isAfter(vacationStartDate)) {
-            return true;
-        } else {
-            return false;
-        }
+        return date.isBefore(vacationEndDate) && date.isAfter(vacationStartDate);
     }
 
 }

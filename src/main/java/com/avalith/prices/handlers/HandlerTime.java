@@ -4,16 +4,16 @@ import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
+import static com.avalith.prices.utils.Constants.*;
+
 public class HandlerTime extends BaseDateTimeHandler {
-    LocalTime twenty = LocalTime.of(20, 0);
-    LocalTime seven = LocalTime.of(7, 0);
 
     @Override
     public Double procesar(LocalDateTime localDateTime ) {
         if (verifyHour(setHour(localDateTime)) && !(getDay(localDateTime) == DayOfWeek.WEDNESDAY)){
-            return 20.0;
+            return plusTwenty;
         }else {
-            return next.procesar(localDateTime);
+            return zero;
         }
     }
 

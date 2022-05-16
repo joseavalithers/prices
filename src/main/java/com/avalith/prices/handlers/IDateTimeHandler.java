@@ -4,5 +4,5 @@ import java.time.LocalDateTime;
 import java.time.temporal.Temporal;
 
 public interface IDateTimeHandler {
-    public Double procesar(LocalDateTime localDateTime);
+    Double procesar(LocalDateTime localDateTime);
 }

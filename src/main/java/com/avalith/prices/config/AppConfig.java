@@ -16,4 +16,5 @@ public class AppConfig {
     public DiscountCalculator getDiscountCalculator(){
         return new DiscountCalculator();
     }
+
 }

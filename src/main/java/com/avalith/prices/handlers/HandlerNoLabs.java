@@ -1,6 +1,7 @@
 package com.avalith.prices.handlers;
 
 import com.avalith.prices.models.Year;
+import com.avalith.prices.utils.Constants;
 import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDate;
@@ -17,7 +18,7 @@ public class HandlerNoLabs extends BaseDateTimeHandler {
     @Override
     public Double procesar(LocalDateTime localDateTime) {
         if (!verifyIfIsNotLab(localDateTime)){
-            return -5.0;
+            return Constants.minusFive;
         }else {
             return next.procesar(localDateTime);
         }
