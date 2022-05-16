@@ -1,19 +1,19 @@
 package com.avalith.prices.handlers;
 
+import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.temporal.Temporal;
 
 public class HandlerTime extends BaseDateTimeHandler {
     LocalTime twenty = LocalTime.of(20, 0);
     LocalTime seven = LocalTime.of(7, 0);
 
     @Override
-    public void procesar(LocalDateTime localDateTime) {
-        if (verifyHour(setHour(localDateTime))){
-            //setea el descuento
+    public Double procesar(LocalDateTime localDateTime ) {
+        if (verifyHour(setHour(localDateTime)) && !(getDay(localDateTime) == DayOfWeek.WEDNESDAY)){
+            return 20.0;
         }else {
-            //pasa al siguiente
+            return next.procesar(localDateTime);
         }
     }
 

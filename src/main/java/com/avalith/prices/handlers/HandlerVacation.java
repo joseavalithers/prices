@@ -5,11 +5,11 @@ import java.time.temporal.Temporal;
 
 public class HandlerVacation extends BaseDateTimeHandler{
     @Override
-    public void procesar(LocalDateTime localDateTime) {
+    public Double procesar(LocalDateTime localDateTime) {
         if (verifyVacation(tempToLD(localDateTime))){
-            //setea el precio
+            return -10.0;
         }else {
-            //next
+            return next.procesar(localDateTime);
         }
     }
 }

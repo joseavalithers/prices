@@ -23,39 +23,8 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Slf4j
 public class PriceController {
-
     @Autowired
     DiscountCalculator discountCalculator = new DiscountCalculator();
-
-
-    @PostMapping("/price")
-    public ResponseEntity<Double> getPrice(@RequestParam Double price, @RequestParam String date){
-        return new ResponseEntity<>(1.2, HttpStatus.OK);
-    }
-    @GetMapping("/nolabs")
-    public ResponseEntity<Year> getMonths(){
-        RestTemplate restTemplate = new RestTemplate();
-        String fooResourceUrl
-                = "http://nolaborables.com.ar/api/v2/feriados/2022";
-        Year response = restTemplate.getForObject(fooResourceUrl, Year.class);
-        Optional<Year> opt = Optional.ofNullable(response);
-        if (opt.isEmpty()){
-            return null;
-        }
-        return opt.map(value -> new ResponseEntity<>(value,HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(null, HttpStatus.NOT_FOUND));
-    }
-    @GetMapping("/nolabs/verify")
-    public ResponseEntity<Boolean> isNoLab(@RequestParam Integer dia, @RequestParam Integer mes, @RequestParam Integer year){
-        LocalDate date = LocalDate.of(year, mes, dia);
-        Boolean value = false;
-        value = discountCalculator.verifyNoLabs(date);
-        value = discountCalculator.verifyWednesday(date);
-        return new ResponseEntity<>(value,HttpStatus.OK);
-    }
-    @GetMapping("nolabs/localtime")
-    public ResponseEntity<LocalDateTime> getLocalDate(){
-        return new ResponseEntity<>(LocalDateTime.now(),HttpStatus.OK);
-    }
 
     @Operation(operationId = "getDiscount", summary = "get the discount as a double")
     @PostMapping("/nolabs/discount")

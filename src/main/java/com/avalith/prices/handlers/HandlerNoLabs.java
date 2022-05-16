@@ -12,17 +12,17 @@ import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class HandlerNoLabs extends BaseDateTimeHandler {
+    RestTemplate restTemplate = new RestTemplate();
+    String fooResourceUrl = "http://nolaborables.com.ar/api/v2/feriados/2022";
     @Override
-    public void procesar(LocalDateTime localDateTime) {
+    public Double procesar(LocalDateTime localDateTime) {
         if (!verifyIfIsNotLab(localDateTime)){
-            //no seguir
+            return -5.0;
         }else {
-            //siguiente
+            return next.procesar(localDateTime);
         }
     }
     public Optional<Year> getYearFromApi() {
-        RestTemplate restTemplate = new RestTemplate();
-        String fooResourceUrl = "http://nolaborables.com.ar/api/v2/feriados/2022";
         Year response = restTemplate.getForObject(fooResourceUrl, Year.class);
         Optional<Year> opt = Optional.ofNullable(response);
         if (opt.isEmpty()) {
