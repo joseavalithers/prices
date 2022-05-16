@@ -21,7 +21,7 @@ class DiscountCalculatorTest {
     LocalDateTime twentyone = LocalDateTime.of(2022,4,4,21,0);
 
 
-    @Test
+    /*@Test
     void testVerifyWednesday() {
         assertTrue(discountCalculator.verifyWednesday(yesItsWednesday));
     }
@@ -66,4 +66,6 @@ class DiscountCalculatorTest {
     void twentyoneTest(){
         assertEquals(+20.0,discountCalculator.getFinalPrice(twentyone));
     }
+
+     */
 }
